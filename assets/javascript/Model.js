@@ -17,9 +17,9 @@ class Model {
 
         if (localStorage.getItem(this._topicsKey) === null) {
             
-            this._topics.push("Computers");
-            this._topics.push("Lakers");
-            this._topics.push("Disc Golf");
+            this._topics.push(new Topic("Computers", false));
+            this._topics.push(new Topic("Lakers", false));
+            this._topics.push(new Topic("Disc Golf", false));
 
             this.setTopicsInLocalStorage();
         }
@@ -33,19 +33,65 @@ class Model {
 
     getTopicsFromLocalStorage() {
 
-        this._topics = JSON.parse(localStorage.getItem(this._topicsKey));
+        let simpleTopics = JSON.parse(localStorage.getItem(this._topicsKey));
+
+        for (let topic of simpleTopics) {
+
+            this._topics.push(new Topic(topic, false));
+        }
     }
 
     setTopicsInLocalStorage() {
 
-        localStorage.setItem(this._topicsKey, JSON.stringify(this._topics));
+        let simpleTopics = [];
+
+        for (let topic of this._topics) {
+
+            simpleTopics.push(topic._topic);
+        }
+
+        localStorage.setItem(this._topicsKey, JSON.stringify(simpleTopics));
     }
 
-    removeTopic(topic) {
+    removeTopic(simpleTopic) {
 
-        this._topics = this._topics.filter(x => x !== topic);
+        this._topics = this._topics.filter(topicOBJ => topicOBJ._topic !== simpleTopic);
 
         this.setTopicsInLocalStorage();
+    }
+
+    selectTopic(simpleTopic) {
+
+        let topic = this._topics.find(topicOBJ => topicOBJ._topic === simpleTopic);
+
+        topic.selectTopic();
+    }
+
+    unSelectTopic(simpleTopic) {
+
+        let topic = this._topics.find(topicOBJ => topicOBJ._topic === simpleTopic);
+
+        topic.unSelectTopic();
+    }
+}
+
+
+class Topic {
+
+    constructor(topic, isSelected) {
+
+        this._topic = topic;
+        this._isSelected = isSelected;
+    }
+
+    selectTopic() {
+
+        this._isSelected = true;
+    }
+
+    unSelectTopic() {
+
+        this._isSelected = false;
     }
 }
 

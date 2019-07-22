@@ -4,13 +4,13 @@
 class ViewController {
 
     constructor() {
-        
+
         this._searchHistoryBTNs = [];
         this._btnWrapper = $("#btnWrapper");
     }
 
     renderSearchHistoryBTNs(topics) {
-  
+
         this._searchHistoryBTNs = [];
 
         this._btnWrapper.children(".searchBtn").remove();
@@ -23,9 +23,19 @@ class ViewController {
 
             let newSearchBTN = $("<div>").attr("id", newBTNId).addClass("searchBtn");
 
-            let newSelectBTN = $("<div>").text(topic).addClass("selectBtn");
-            
-            let newRemoveBTN = $("<div>").text("X").addClass("removeBtn").hide(0);
+            if (topic._isSelected) {
+                
+                newSearchBTN.addClass("selected").fadeTo(0, 0.25);
+            }
+
+            let newSelectBTN = $("<div>").text(topic._topic).addClass("selectBtn");
+
+            let newRemoveBTN = $("<div>").text("X").addClass("removeBtn");
+
+            if ($(window).width() > 768) {
+
+                newRemoveBTN.hide(0);
+            }
 
             newSearchBTN.append(newSelectBTN).append(newRemoveBTN);
 
@@ -35,10 +45,90 @@ class ViewController {
 
             count++;
         }
+
+        this.assignSearchHistoryBTNListeners();
     }
 
-   
+    // renderSearchHistoryBTNs() {
+
+    //     // this._viewController.renderSearchHistoryBTNs(this._model._topics);
+
+    //     this.assignSearchHistoryBTNListeners();
+    // }
+
+    assignSearchHistoryBTNListeners() {
+
+        for (let btn of this._searchHistoryBTNs) {
+
+            let simpleTopic = btn.children(".selectBtn").text();
+
+            btn.children(".selectBtn").click(() => {
+
+                if (btn.hasClass("selected")) {
+
+                    btn.removeClass("selected");
+
+                    this._model.unSelectTopic(simpleTopic);
+
+                    btn.fadeTo(250, 1.0);
+                }
+                else {
+
+                    btn.addClass("selected");
+
+                    this._model.selectTopic(simpleTopic);
+
+                    btn.fadeTo(250, 0.25);
+                }
+
+                // console.log(simpleTopic);
+            });
+
+            btn.children(".removeBtn").click(() => {
+
+                // console.log("Removed " + simpleTopic);
+
+                this.removeSearchHistoryBTNListeners();
+
+                this._model.removeTopic(simpleTopic);
+
+                // this._viewController._btnWrapper.children(btn.attr("id")).remove();
+
+                this.renderSearchHistoryBTNs();
+            });
+
+            if ($(window).width() > 768) {
+
+                btn.mouseenter(() => {
+
+                    btn.children(".removeBtn").fadeIn(250);
+                });
+    
+                btn.mouseleave(() => {
+    
+                    btn.children(".removeBtn").fadeOut(250);
+                });
+            }
+        }
+    }
+
+    removeSearchHistoryBTNListeners() {
+
+        for (let btn of this._searchHistoryBTNs) {
+        
+            btn.off();
+
+            btn.children().off();
+        }
+    }
+
+
+
+
+
 }
+
+
 
 
 // class ViewController {

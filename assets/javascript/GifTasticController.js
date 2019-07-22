@@ -27,33 +27,55 @@ class GifTasticController {
 
         for (let btn of this._viewController._searchHistoryBTNs) {
 
+            let simpleTopic = btn.children(".selectBtn").text();
+
             btn.children(".selectBtn").click(() => {
 
-                console.log(btn.children(".selectBtn").text());
+                if (btn.hasClass("selected")) {
+
+                    btn.removeClass("selected");
+
+                    this._model.unSelectTopic(simpleTopic);
+
+                    btn.fadeTo(250, 1.0);
+                }
+                else {
+
+                    btn.addClass("selected");
+
+                    this._model.selectTopic(simpleTopic);
+
+                    btn.fadeTo(250, 0.25);
+                }
+
+                // console.log(simpleTopic);
             });
 
             btn.children(".removeBtn").click(() => {
 
+                // console.log("Removed " + simpleTopic);
+
                 this.removeSearchHistoryBTNListeners();
 
-                console.log("Removed " + btn.children(".selectBtn").text());
+                this._model.removeTopic(simpleTopic);
 
-                this._model.removeTopic(btn.children(".selectBtn").text());
-
-                this._viewController._btnWrapper.children(btn.attr("id")).remove();
+                // this._viewController._btnWrapper.children(btn.attr("id")).remove();
 
                 this.renderSearchHistoryBTNs();
             });
 
-            btn.mouseenter(() => {
+            if ($(window).width() > 768) {
 
-                btn.children(".removeBtn").fadeIn(250);
-            });
+                btn.mouseenter(() => {
 
-            btn.mouseleave(() => {
-
-                btn.children(".removeBtn").fadeOut(250);
-            });
+                    btn.children(".removeBtn").fadeIn(250);
+                });
+    
+                btn.mouseleave(() => {
+    
+                    btn.children(".removeBtn").fadeOut(250);
+                });
+            }
         }
     }
 
