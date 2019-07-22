@@ -1,21 +1,15 @@
 "use strict";
-/* global GifTasticController */
+/* global ViewController */
 
 class GifTastic {
 
     constructor() {
-        
-        this._gifTasticController = null;
+
+        this._viewController = null;
     }
 
     startProgram() {
 
-        this._gifTasticController = new GifTasticController();
-
-        // this._gifTasticController.renderSearchHistoryButtons();
-
-        // $(window).on("topicsReady", this.renderSearchHistoryButtons);
-
-
+        this._viewController = new ViewController();
     }
 }

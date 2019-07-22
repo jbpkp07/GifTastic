@@ -54,9 +54,14 @@ body, html {
     background: rgb(0, 0, 255);
     border: 1.5px solid rgba(240,240,240,0.75);
     border-radius: 10px;
+    color: rgba(240,240,240, 0.75);
     height: 36px;
     margin: 0px 10px 20px 10px;
+}
 
+.searchBtn:hover {
+    border: 1.5px solid rgba(255,255,255,1.0);
+    color: rgba(255,255,255,1.0);
 }
 
 .selectBtn {
@@ -77,6 +82,27 @@ body, html {
     width: min-content;
 }
 
+#searchInputRegion {
+    margin: 20px auto auto auto ;
+    width: 256px;
+}
+
+#searchInputLabel {
+    font-size: 16pt;
+    position: relative;
+    top: 3px;
+}
+
+#searchInput {
+    background: rgb(240,240,240);
+    width: 100px;
+}
+
+#searchInputBtn {
+    background: rgb(240,240,240);
+    left: 14px;
+    position: relative;
+}
 
 
 
@@ -119,104 +145,4 @@ body, html {
 #testWrapper {
     margin: 0 auto;
     width: 80%;
-}
-
-
-
-
-
-#game {
-    background: rgb(0,0,0);
-    height: 100%;
-    width: 100%;
-    display: flex;
-}
-
-#backgroundIMG {
-    background: rgb(0,0,0);
-    background-attachment: local;
-    background-image: url(../images/chalkboard.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    height: calc(100vw * 0.625);
-    margin: auto auto;
-    position: relative;
-    top: -10%;
-    width: 100%;   
-}
-
-#chalkboardBox {
-    height: 61.5%;
-    margin: 0 auto;
-    padding: 10px;
-    position: relative;
-    top: 18.5%;
-    width: 29%;
-}
-
-#gameTitle {
-    font-size: 5vw;
-    position: relative;
-    text-align: center;
-    top: 20%;
-}
-
-.button {
-    border: 2px solid rgb(244, 244, 240);
-    border-radius: 25px;
-    font-size: 2vw;
-    margin: 0 auto;
-    margin-top: 5%;
-    padding: 1%;
-    position: relative;
-    text-align: center;
-    top: 30%;
-    width: 55%;
-}
-
-#pickCategory, #pickDifficulty {
-    font-size: 5vw;
-    text-align: center;
-}
-
-#category {
-    margin-bottom: 2%;
-}
-
-#question {
-    font-size: 2vw;
-    margin-top: 10%;
-}
-
-.answerBTN {
-    font-size: 1.25vw;
-    margin-top: 6%;
-    width: 100%;
-}
-
-#timer {
-    bottom: 2%;
-    font-size: 1.25vw;
-    left: 43%;
-    position: absolute;
-    width: 100%;
-}
-
-#revealAnswer, #playAgainBTN {
-    font-size: 1.5vw;
-    text-align: center;
-}
-
-#result {
-    font-size: 4vw;
-    margin-top: 20%;
-}
-
-#dividerLine {
-    font-size: 4vw;
-}
-
-.totals, #playAgainBTN {
-    margin-top: 10%;
 }
