@@ -1,0 +1,226 @@
+* {
+    box-sizing: border-box;
+    cursor: crosshair;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select:   none; /* Safari */
+    -khtml-user-select:    none; /* Konqueror HTML */
+    -moz-user-select:      none; /* Firefox */
+    -ms-user-select:       none; /* Internet Explorer/Edge */
+    user-select:           none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+body, html {
+    background: rgb(32, 32, 32);
+    color: rgb(240,240,240);
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    /* overflow-y: hidden; */
+}
+
+#title {
+    font-size: 36pt;
+    font-weight: 900;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+#btnWrapper {
+    border: 2px solid rgb(240,240,240);
+    border-radius: 10px;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    margin: 20px auto 0px auto;
+    padding: 0px 10px 0px 10px;
+    text-align: center;
+    width: 80%;
+}
+
+#searchHistory {
+    font-size: 16pt;
+    margin: auto 10px auto 10px;
+    padding: 10px 0px 10px 0px;
+    width: 100%;
+}
+
+.searchBtn {
+    background: rgb(0, 0, 255);
+    border: 1.5px solid rgba(240,240,240,0.75);
+    border-radius: 10px;
+    margin: 0px 10px 20px 10px;
+    padding: 10px;
+}
+
+.removeBtn {
+    background: rgb(240,240,240);
+    color: rgb(32, 32, 32);
+    border: 1.5px solid rgb(240,240,240);
+    border-radius: 10px;
+    font-weight: 900;
+    margin-left: auto;
+    padding: 3px 5px 2px 5px;
+    position: relative;
+    right: -20px;
+    top: -35px;
+    width: min-content;
+}
+
+
+
+
+/* .searchBtn:hover, .removeBtn:hover { */
+    /* background: rgb(32, 32, 32); */
+    /* display: block; */
+    /* color: rgba(240,240,240,0.25); */
+    /* border: 1.5px solid rgba(240,240,240,0.25); */
+    /* opacity: 0.25; */
+    /* visibility: show; */
+/* } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#main123 {
+    /* width: 200px; */
+    /* height: 200px; */
+    /* border: 1px solid #c3c3c3; */
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    display: flex;
+    flex-wrap: wrap;
+
+    text-align: center;
+    margin: 0 auto;
+    width: 80%;
+  }
+  
+  #test123 {
+      border-radius: 25px;
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+  }
+
+#testWrapper {
+    margin: 0 auto;
+    width: 80%;
+}
+
+
+
+
+
+#game {
+    background: rgb(0,0,0);
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+#backgroundIMG {
+    background: rgb(0,0,0);
+    background-attachment: local;
+    background-image: url(../images/chalkboard.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: calc(100vw * 0.625);
+    margin: auto auto;
+    position: relative;
+    top: -10%;
+    width: 100%;   
+}
+
+#chalkboardBox {
+    height: 61.5%;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+    top: 18.5%;
+    width: 29%;
+}
+
+#gameTitle {
+    font-size: 5vw;
+    position: relative;
+    text-align: center;
+    top: 20%;
+}
+
+.button {
+    border: 2px solid rgb(244, 244, 240);
+    border-radius: 25px;
+    font-size: 2vw;
+    margin: 0 auto;
+    margin-top: 5%;
+    padding: 1%;
+    position: relative;
+    text-align: center;
+    top: 30%;
+    width: 55%;
+}
+
+#pickCategory, #pickDifficulty {
+    font-size: 5vw;
+    text-align: center;
+}
+
+#category {
+    margin-bottom: 2%;
+}
+
+#question {
+    font-size: 2vw;
+    margin-top: 10%;
+}
+
+.answerBTN {
+    font-size: 1.25vw;
+    margin-top: 6%;
+    width: 100%;
+}
+
+#timer {
+    bottom: 2%;
+    font-size: 1.25vw;
+    left: 43%;
+    position: absolute;
+    width: 100%;
+}
+
+#revealAnswer, #playAgainBTN {
+    font-size: 1.5vw;
+    text-align: center;
+}
+
+#result {
+    font-size: 4vw;
+    margin-top: 20%;
+}
+
+#dividerLine {
+    font-size: 4vw;
+}
+
+.totals, #playAgainBTN {
+    margin-top: 10%;
+}
