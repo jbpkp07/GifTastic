@@ -5,8 +5,39 @@ class ViewController {
 
     constructor() {
         
+        this._searchHistoryBTNs = [];
+        this._btnWrapper = $("#btnWrapper");
     }
-    
+
+    renderSearchHistoryBTNs(topics) {
+  
+        this._searchHistoryBTNs = [];
+
+        this._btnWrapper.children(".searchBtn").remove();
+
+        let count = 0;
+
+        for (let topic of topics) {
+
+            let newBTNId = "btn-" + count;
+
+            let newSearchBTN = $("<div>").attr("id", newBTNId).addClass("searchBtn");
+
+            let newSelectBTN = $("<div>").text(topic).addClass("selectBtn");
+            
+            let newRemoveBTN = $("<div>").text("X").addClass("removeBtn").hide(0);
+
+            newSearchBTN.append(newSelectBTN).append(newRemoveBTN);
+
+            this._searchHistoryBTNs.push(newSearchBTN);
+
+            this._btnWrapper.append(newSearchBTN);
+
+            count++;
+        }
+    }
+
+   
 }
 
 

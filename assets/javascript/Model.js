@@ -5,8 +5,48 @@ class Model {
 
     constructor() {
         
+        this._topics = [];
+        this._topicsKey = "_gifTasticTopics";
+        // this._topicsAreReady = new CustomEvent("topicsReady");
+
+
+        this.assignTopicsFromLocalStorage();
     }
 
+    assignTopicsFromLocalStorage() {
+
+        if (localStorage.getItem(this._topicsKey) === null) {
+            
+            this._topics.push("Computers");
+            this._topics.push("Lakers");
+            this._topics.push("Disc Golf");
+
+            this.setTopicsInLocalStorage();
+        }
+        else {
+    
+            this.getTopicsFromLocalStorage();
+        }
+
+        // dispatchEvent(this._topicsAreReady);
+    }
+
+    getTopicsFromLocalStorage() {
+
+        this._topics = JSON.parse(localStorage.getItem(this._topicsKey));
+    }
+
+    setTopicsInLocalStorage() {
+
+        localStorage.setItem(this._topicsKey, JSON.stringify(this._topics));
+    }
+
+    removeTopic(topic) {
+
+        this._topics = this._topics.filter(x => x !== topic);
+
+        this.setTopicsInLocalStorage();
+    }
 }
 
 

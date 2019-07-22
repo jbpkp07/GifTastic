@@ -5,30 +5,73 @@ class GifTasticController {
 
     constructor() {
 
+        this._model = new Model();
+        this._viewController = new ViewController();
 
-        this.testValue = false;
-
-        this.hasFinished = new CustomEvent("startFinished");
+        this.initialize();
     }
 
-    test1controller() {
-        // alert("start");
-        setTimeout(() => {
+    initialize() {
 
-            dispatchEvent(this.hasFinished);
+        this.renderSearchHistoryBTNs();
+    }
 
-            setTimeout(() => {
+    renderSearchHistoryBTNs() {
 
-                dispatchEvent(this.hasFinished);
-            }, 3000);
+        this._viewController.renderSearchHistoryBTNs(this._model._topics);
 
-        }, 1000);
+        this.assignSearchHistoryBTNListeners();
+    }
 
+    assignSearchHistoryBTNListeners() {
+
+        for (let btn of this._viewController._searchHistoryBTNs) {
+
+            btn.children(".selectBtn").click(() => {
+
+                console.log(btn.children(".selectBtn").text());
+            });
+
+            btn.children(".removeBtn").click(() => {
+
+                this.removeSearchHistoryBTNListeners();
+
+                console.log("Removed " + btn.children(".selectBtn").text());
+
+                this._model.removeTopic(btn.children(".selectBtn").text());
+
+                this._viewController._btnWrapper.children(btn.attr("id")).remove();
+
+                this.renderSearchHistoryBTNs();
+            });
+
+            btn.mouseenter(() => {
+
+                btn.children(".removeBtn").fadeIn(250);
+            });
+
+            btn.mouseleave(() => {
+
+                btn.children(".removeBtn").fadeOut(250);
+            });
+        }
+    }
+
+    removeSearchHistoryBTNListeners() {
+
+        for (let btn of this._viewController._searchHistoryBTNs) {
         
+            btn.off();
+
+            btn.children().off();
+        }
     }
-
-
 }
+
+
+
+ // $(window).off("startFinished", this.test2);
+
 
 
 // class GameController {
@@ -136,7 +179,7 @@ class GifTasticController {
 //                     this._ViewController.hidePlayAgainBTN(1000).then(() => {
 
 //                         this._ViewController.hideRevealAnswer(1000).then(() => {
-                            
+
 //                             this._PlayAgain = true;
 //                         });
 //                     });
@@ -193,7 +236,7 @@ class GifTasticController {
 //             this._ViewController.setRevealAnswer(this._Model._CurrentQuestion, this._Model._Results);
 
 //             this._ViewController.showRevealAnswer(1000).then(() => {
-             
+
 //                 setTimeout(() => { 
 
 //                     this.answerTriviaQuestions();
