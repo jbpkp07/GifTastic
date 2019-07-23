@@ -18,9 +18,16 @@ class Model {
 
         if (localStorage.getItem(this._topicsKey) === null) {
 
-            this._topicGifs.push(new TopicGifs("Computers", false));
-            this._topicGifs.push(new TopicGifs("Lakers", false));
-            this._topicGifs.push(new TopicGifs("Disc Golf", false));
+            this._topicGifs.push(new TopicGifs("Lebron James", false));
+            this._topicGifs.push(new TopicGifs("Kobe Bryant", false));
+            this._topicGifs.push(new TopicGifs("Kevin Durant", false));
+            this._topicGifs.push(new TopicGifs("Stephen Curry", false));
+            this._topicGifs.push(new TopicGifs("James Harden", false));
+            this._topicGifs.push(new TopicGifs("Russell Westbrook", false));
+            this._topicGifs.push(new TopicGifs("Magic Johnson", false));
+            this._topicGifs.push(new TopicGifs("Kareem Abdul-Jabbar", false));
+            this._topicGifs.push(new TopicGifs("Michael Jordan", false));
+            this._topicGifs.push(new TopicGifs("Anthony Davis", false));
 
             this.setTopicsInLocalStorage();
         }
@@ -54,12 +61,14 @@ class Model {
 
     addTopic(simpleTopic) {
 
+        simpleTopic = simpleTopic.trim();
+
         if (simpleTopic.length < 1) {
 
             return;
         }
 
-        if (typeof this._topicGifs.find(topicOBJ => topicOBJ._topic === simpleTopic) === 'undefined') {
+        if (typeof this._topicGifs.find(topicOBJ => topicOBJ._topic.toUpperCase() === simpleTopic.toUpperCase()) === 'undefined') {
 
             this._topicGifs.push(new TopicGifs(simpleTopic, false));
 
@@ -81,14 +90,14 @@ class Model {
         topic.selectTopic();
 
         if (topic._apiResponse === null) {
-  
+
             this._giphyAPI.getGifsFromAPI(simpleTopic).then(() => {
 
                 topic.assignGifs(this._giphyAPI._apiResponse);
 
                 dispatchEvent(new CustomEvent("renderGifs"));
             });
-        } 
+        }
         else {
 
             dispatchEvent(new CustomEvent("renderGifs"));
@@ -112,8 +121,7 @@ class TopicGifs {
         this._isSelected = isSelected;
 
         this._apiResponse = null;
-        this._stillGifs = [];
-        this._animatedGifs = [];
+        this._gifHTMLElements = [];
     }
 
     selectTopic() {
@@ -131,34 +139,38 @@ class TopicGifs {
         if (this._apiResponse === null) {
 
             this._apiResponse = apiResponse;
-
+     
             for (let gifPackage of this._apiResponse.data) {
+          
+                let stillSRC = gifPackage.images.original_still.url;
 
-               this.buildStillImageHTML(gifPackage);
+                let stillGif = new Image();
+
+                stillGif.src = stillSRC; //Begin still image downloading immediately
+
+                let animatedSRC = gifPackage.images.fixed_height.webp;  //Optimized for best quality vs load time
+
+                let animatedGif = new Image();
+
+                setTimeout(() => {
+
+                    //Begin download after we will likely already have still images (try to get them first!)
+                    animatedGif.src = animatedSRC;
+                }, 1000);
+
+                let rating = gifPackage.rating.toUpperCase();
+
+                $(stillGif).addClass("gif").attr("still_src", stillSRC).attr("animated_src", animatedSRC);
+
+                let gifBox = $("<div>").addClass("gifBox").append(stillGif);
+
+                let sideBar = $("<div>").addClass("sideBar").text("Rating: " + rating);
+
+                let gifWrapper = $("<div>").addClass("gifWrapper").attr("hasclicked", "false").append(gifBox, sideBar);
+
+                this._gifHTMLElements.push(gifWrapper);
             }
         }
-    }
-
-    buildStillImageHTML(gifPackage) {
-
-        let stillGif = new Image();
-
-        stillGif.src = gifPackage.images.original_still.url;
-
-        this.buildGifHTML(stillGif);
-    }
-
-    buildGifHTML(img) {
-
-        $(img).addClass("gif");
-
-        let gifBox = $("<div>").addClass("gifBox").append(img);
-
-        let sideBar = $("<div>").addClass("sideBar").text("Rating: PG");
-
-        let gifWrapper = $("<div>").addClass("gifWrapper").append(gifBox, sideBar);
-
-        this._stillGifs.push(gifWrapper);
     }
 }
 

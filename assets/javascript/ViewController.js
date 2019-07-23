@@ -1,5 +1,5 @@
 "use strict";
-/* global Model, Utility */
+/* global Model, TopicGifs, Utility */
 
 class ViewController {
 
@@ -16,7 +16,7 @@ class ViewController {
         this._generateColors = this.generateBackgroundColors();
 
         this._gifPlaceholders = [
-            
+
             '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
             '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
             '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
@@ -37,15 +37,15 @@ class ViewController {
         this.renderAllContent();
     }
 
-    * generateBackgroundColors () {
+    * generateBackgroundColors() {
 
-        yield "background-color:lightgreen;";
-        yield "background-color:pink;";
-        yield "background-color:khaki;";  
-        yield "background-color:lightblue;";
         yield "background-color:coral;";
+        yield "background-color:lightblue;";
+        yield "background-color:khaki;";
+        yield "background-color:pink;";
+        yield "background-color:lightgreen;";
 
-        yield * this.generateBackgroundColors();
+        yield* this.generateBackgroundColors();
     }
 
     renderAllContent() {
@@ -100,20 +100,25 @@ class ViewController {
     }
 
     renderGifs() {
- 
+
         this._gifContainer.empty();
 
-        for (let topicGif of this._model._topicGifs) {
-           
+        //Reverse through array. 
+        //We want to append in reverse order, so that the most recent searches produce images at the top 
+        for (let i = this._model._topicGifs.length - 1; i >= 0; i--) {
+
+            let topicGif = this._model._topicGifs[i];
+
             if (topicGif._isSelected) {
 
-                for (let gif of topicGif._stillGifs) {
-              
+                //Here we traverse forwards to make sure the images with the most lead-time to download are displayed first for responsiveness
+                for (let gif of topicGif._gifHTMLElements) {
+
                     let color = this._generateColors.next().value;
-                    console.log(color);
+
                     let coloredGif = $(gif).attr("style", color);
 
-                    this._gifContainer.prepend(coloredGif);
+                    this._gifContainer.append(coloredGif);
                 }
             }
         }
@@ -126,10 +131,10 @@ class ViewController {
             for (let placeholder of this._gifPlaceholders) {
 
                 let color = this._generateColors.next().value;
-                console.log(color);
+
                 let placeholderColored = $(placeholder).attr("style", color);
 
-                this._gifContainer.prepend(placeholderColored);
+                this._gifContainer.append(placeholderColored);
             }
         }
     }
@@ -143,7 +148,7 @@ class ViewController {
             btn.children(".selectBtn").click(() => {
 
                 if (btn.hasClass("selected")) {
-  
+
                     btn.removeClass("selected");
 
                     this._model.unSelectTopic(simpleTopic);
@@ -163,7 +168,7 @@ class ViewController {
             });
 
             btn.children(".removeBtn").click(() => {
- 
+
                 this._model.removeTopic(simpleTopic);
 
                 this.renderAllContent();
@@ -198,9 +203,50 @@ class ViewController {
 
         for (let gifWrapper of this._gifContainer.children()) {
 
+            let thisElement = $(gifWrapper);
+
             $(gifWrapper).find(".gif").click(() => {
 
-                console.log("clicked gif");
+                let currentSRC = thisElement.find(".gif").attr("src");
+
+                let stillSRC = thisElement.find(".gif").attr("still_src");
+
+                let animatedSRC = thisElement.find(".gif").attr("animated_src");
+
+                if (thisElement.attr("hasclicked") === "false") {
+
+                    thisElement.find(".gif").attr("src", animatedSRC);
+                }
+                else if (currentSRC === stillSRC) {
+
+                    thisElement.find(".gif").attr("src", animatedSRC);
+                }
+                else {
+
+                    thisElement.find(".gif").attr("src", stillSRC);
+                }
+
+                thisElement.attr("hasclicked", "true");
+            });
+
+            $(gifWrapper).find(".gif").mouseenter(() => {
+
+                if (thisElement.attr("hasclicked") === "false") {
+
+                    let animatedSRC = thisElement.find(".gif").attr("animated_src");
+
+                    thisElement.find(".gif").attr("src", animatedSRC);
+                }
+            });
+
+            $(gifWrapper).find(".gif").mouseleave(() => {
+
+                if (thisElement.attr("hasclicked") === "false") {
+
+                    let stillSRC = thisElement.find(".gif").attr("still_src");
+
+                    thisElement.find(".gif").attr("src", stillSRC); 
+                }
             });
         }
     }
@@ -217,7 +263,7 @@ class ViewController {
         this._submitBTN.off();
 
         for (let gifWrapper of this._gifContainer.children()) {
- 
+
             $(gifWrapper).find(".gif").off();
         }
     }
