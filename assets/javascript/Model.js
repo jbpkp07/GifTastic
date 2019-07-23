@@ -5,11 +5,11 @@ class Model {
 
     constructor() {
 
-        this._topics = [];
+        this._topicGifs = [];
         this._topicsKey = "_gifTasticTopics";
 
-        this._apiAmount = 10;
-        this._giphyAPI = new GiphyAPI(this._apiAmount);
+        this._apiLimit = 10;
+        this._giphyAPI = new GiphyAPI(this._apiLimit);
 
         this.assignTopicsFromLocalStorage();
     }
@@ -18,9 +18,9 @@ class Model {
 
         if (localStorage.getItem(this._topicsKey) === null) {
 
-            this._topics.push(new Topic("Computers", false));
-            this._topics.push(new Topic("Lakers", false));
-            this._topics.push(new Topic("Disc Golf", false));
+            this._topicGifs.push(new TopicGifs("Computers", false));
+            this._topicGifs.push(new TopicGifs("Lakers", false));
+            this._topicGifs.push(new TopicGifs("Disc Golf", false));
 
             this.setTopicsInLocalStorage();
         }
@@ -36,7 +36,7 @@ class Model {
 
         for (let topic of simpleTopics) {
 
-            this._topics.push(new Topic(topic, false));
+            this._topicGifs.push(new TopicGifs(topic, false));
         }
     }
 
@@ -44,7 +44,7 @@ class Model {
 
         let simpleTopics = [];
 
-        for (let topic of this._topics) {
+        for (let topic of this._topicGifs) {
 
             simpleTopics.push(topic._topic);
         }
@@ -59,9 +59,9 @@ class Model {
             return;
         }
 
-        if (typeof this._topics.find(topicOBJ => topicOBJ._topic === simpleTopic) === 'undefined') {
+        if (typeof this._topicGifs.find(topicOBJ => topicOBJ._topic === simpleTopic) === 'undefined') {
 
-            this._topics.push(new Topic(simpleTopic, false));
+            this._topicGifs.push(new TopicGifs(simpleTopic, false));
 
             this.setTopicsInLocalStorage();
         }
@@ -69,34 +69,51 @@ class Model {
 
     removeTopic(simpleTopic) {
 
-        this._topics = this._topics.filter(topicOBJ => topicOBJ._topic !== simpleTopic);
+        this._topicGifs = this._topicGifs.filter(topicOBJ => topicOBJ._topic !== simpleTopic);
 
         this.setTopicsInLocalStorage();
     }
 
     selectTopic(simpleTopic) {
 
-        let topic = this._topics.find(topicOBJ => topicOBJ._topic === simpleTopic);
+        let topic = this._topicGifs.find(topicOBJ => topicOBJ._topic === simpleTopic);
 
         topic.selectTopic();
+
+        if (topic._apiResponse === null) {
+  
+            this._giphyAPI.getGifsFromAPI(simpleTopic).then(() => {
+
+                topic.assignGifs(this._giphyAPI._apiResponse);
+
+                dispatchEvent(new CustomEvent("renderGifs"));
+            });
+        } 
+        else {
+
+            dispatchEvent(new CustomEvent("renderGifs"));
+        }
     }
 
     unSelectTopic(simpleTopic) {
 
-        let topic = this._topics.find(topicOBJ => topicOBJ._topic === simpleTopic);
+        let topic = this._topicGifs.find(topicOBJ => topicOBJ._topic === simpleTopic);
 
         topic.unSelectTopic();
     }
 }
 
 
-class Topic {
+class TopicGifs {
 
     constructor(topic, isSelected) {
 
         this._topic = topic;
-
         this._isSelected = isSelected;
+
+        this._apiResponse = null;
+        this._stillGifs = [];
+        this._animatedGifs = [];
     }
 
     selectTopic() {
@@ -108,34 +125,69 @@ class Topic {
 
         this._isSelected = false;
     }
+
+    assignGifs(apiResponse) {
+
+        if (this._apiResponse === null) {
+
+            this._apiResponse = apiResponse;
+
+            for (let gifPackage of this._apiResponse.data) {
+
+               this.buildStillImageHTML(gifPackage);
+            }
+        }
+    }
+
+    buildStillImageHTML(gifPackage) {
+
+        let stillGif = new Image();
+
+        stillGif.src = gifPackage.images.original_still.url;
+
+        this.buildGifHTML(stillGif);
+    }
+
+    buildGifHTML(img) {
+
+        $(img).addClass("gif");
+
+        let gifBox = $("<div>").addClass("gifBox").append(img);
+
+        let sideBar = $("<div>").addClass("sideBar").text("Rating: PG");
+
+        let gifWrapper = $("<div>").addClass("gifWrapper").append(gifBox, sideBar);
+
+        this._stillGifs.push(gifWrapper);
+    }
 }
 
 
 class GiphyAPI {
 
-    constructor(amount) {
+    constructor(limit) {
 
         this._apiRoot = "https://api.giphy.com/v1/gifs/search";
         this._apiKey = "api_key=KLZEzDR0Dtlp37kOPbcElqrIsQGzbmfQ";
         this._apiQuery = "q=";
-        this._apiLimit = "limit=";
+        this._apiLimit = "limit=" + limit;
         this._apiLang = "lang=en";
 
-        this._APIResponse = null;
+        this._apiResponse = null;
 
-        this._AreGifsConsumed = false;
+        this._areGifsConsumed = false;
     }
 
-    getGifsFromAPI(topic) {
+    getGifsFromAPI(simpleTopic) {
 
-        let apiURL = this.generateAPIUrl(topic);
+        let apiURL = this.generateAPIUrl(simpleTopic);
 
         let connection = {
             url: apiURL,
             method: "Get"
         };
 
-        this._AreGifsConsumed = false;
+        this._areGifsConsumed = false;
 
         $.ajax(connection).then((response) => {
 
@@ -145,9 +197,9 @@ class GiphyAPI {
                 throw new Error("Class:Model:getGifsFromAPI Giphy API did not respond correctly");
             }
 
-            this._APIResponse = response;
+            this._apiResponse = response;
 
-            this._AreGifsConsumed = true;
+            this._areGifsConsumed = true;
 
         }).catch(() => {
 
@@ -155,71 +207,18 @@ class GiphyAPI {
             throw new Error("Class:Model:getGifsFromAPI Giphy API did not respond correctly");
         });
 
-        return Utility.createPromise(() => this._AreGifsConsumed === true);
+        return Utility.createPromise(() => this._areGifsConsumed === true);
     }
 
-    generateAPIUrl(topic) {
+    generateAPIUrl(simpleTopic) {
 
         let apiUrl =
             this._apiRoot + "?" +
             this._apiKey + "&" +
-
-
-            this._apiAmount + "&" +
-            this._apiCategory + categoryNum + "&" +
-            this._apiDifficulty + difficulty.toLowerCase() + "&" +
-            this._APIType;
+            this._apiQuery + simpleTopic + "&" +
+            this._apiLimit + "&" +
+            this._apiLang;
 
         return apiUrl;
     }
 }
-
-
-// class TriviaQuestion {
-
-//     constructor(jsonQuestion) {
-
-//         this._Category = jsonQuestion.category;
-//         this._Type = jsonQuestion.type;
-//         this._Difficulty = jsonQuestion.difficulty;
-//         this._Question = jsonQuestion.question;
-//         this._CorrectAnswer = jsonQuestion.correct_answer;
-//         this._IncorrectAnswers = jsonQuestion.incorrect_answers;
-
-//         this._Answers = [];
-
-//         this.randomizeAnswers();
-//     }
-
-//     randomizeAnswers() {
-
-//         for (let incorrectAnswer of this._IncorrectAnswers) {
-
-//             this._Answers.push(incorrectAnswer);
-//         }
-
-//         this._Answers.push(this._CorrectAnswer);
-
-//         this._Answers = this.shuffle(this._Answers);
-//     }
-
-//     shuffle(array) {
-
-//         let currentIndex = array.length;
-//         let temporaryValue;
-//         let randomIndex;
-
-//         while (currentIndex !== 0) {
-
-//           randomIndex = Math.floor(Math.random() * currentIndex);
-
-//           currentIndex--;
-
-//           temporaryValue = array[currentIndex];
-//           array[currentIndex] = array[randomIndex];
-//           array[randomIndex] = temporaryValue;
-//         }
-
-//         return array;
-//     }
-// }

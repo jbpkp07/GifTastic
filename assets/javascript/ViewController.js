@@ -6,10 +6,31 @@ class ViewController {
     constructor() {
 
         this._model = new Model();
-        this._searchHistoryBTNs = [];
-        this._btnWrapper = $("#btnWrapper");
+
         this._searchInput = $("#searchInput");
         this._submitBTN = $("#searchInputBtn");
+        this._btnWrapper = $("#btnWrapper");
+        this._searchHistoryBTNs = [];
+        this._gifContainer = $("#gifContainer");
+
+        this._gifPlaceholders = [
+            
+            '<div class="gifWrapper"style="background-color:coral;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:lightblue;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:khaki;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:pink;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:lightgreen;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:coral;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:lightblue;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:khaki;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:pink;"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"style="background-color:lightgreen;"><div class="gifBox"></div><div class="sideBar"></div></div>'
+        ];
+
+        $(window).on("renderGifs", () => {
+
+            this.renderGifs();
+        });
 
         this.renderSearchHistoryBTNs();
     }
@@ -22,7 +43,7 @@ class ViewController {
 
         let count = 0;
 
-        for (let topic of this._model._topics) {
+        for (let topic of this._model._topicGifs) {
 
             let newBTNId = "btn-" + count;
 
@@ -35,7 +56,7 @@ class ViewController {
 
             let newSelectBTN = $("<div>").text(topic._topic).addClass("selectBtn");
 
-            let newRemoveBTN = $("<div>").text("X").addClass("removeBtn");
+            let newRemoveBTN = $("<div>").append($("<span>").text("X")).addClass("removeBtn");
 
             if ($(window).width() > 768) {
 
@@ -51,7 +72,38 @@ class ViewController {
             count++;
         }
 
+        this.addGifPlaceholders();
+
         this.assignListeners();
+    }
+
+    renderGifs() {
+ 
+        this._gifContainer.empty();
+
+        for (let topicGif of this._model._topicGifs) {
+           
+            if (topicGif._isSelected) {
+
+                for (let gif of topicGif._stillGifs) {
+              
+                    this._gifContainer.append(gif);
+                }
+            }
+        }
+
+        this.addGifPlaceholders();
+    }
+
+    addGifPlaceholders() {
+
+        if (this._gifContainer.children().length === 0) {
+
+            for (let placeholder of this._gifPlaceholders) {
+
+                this._gifContainer.append(placeholder);
+            }
+        }
     }
 
     assignListeners() {
@@ -69,6 +121,8 @@ class ViewController {
                     this._model.unSelectTopic(simpleTopic);
 
                     btn.fadeTo(250, 1.0);
+
+                    this.renderGifs();
                 }
                 else {
 
@@ -87,6 +141,8 @@ class ViewController {
                 this._model.removeTopic(simpleTopic);
 
                 this.renderSearchHistoryBTNs();
+
+                this.renderGifs();
             });
 
             if ($(window).width() > 768) {

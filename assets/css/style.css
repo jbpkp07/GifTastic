@@ -44,7 +44,7 @@ body, html {
 }
 
 #searchHistory {
-    font-size: 16pt;
+    font-size: 10pt;
     margin: auto 10px auto 10px;
     padding: 10px 0px 20px 0px;
     width: 100%;
@@ -65,15 +65,19 @@ body, html {
 }
 
 .selectBtn {
+    color: rgba(255,255,255,1.0);
     padding: 10px;
 }
 
 .removeBtn {
+    align-items: center;
     background: rgb(240,240,240);
-    color: rgb(32, 32, 32);
     border: 1.5px solid rgb(240,240,240);
-    border-radius: 25px;
+    border-radius: 50px;
+    color: rgb(32, 32, 32);
+    display: flex;
     font-weight: 900;
+    justify-content: center;
     margin-left: auto;
     padding: 2px 4px 2px 4px;
     position: relative;
@@ -104,45 +108,47 @@ body, html {
     position: relative;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#main123 {
-    /* width: 200px; */
-    /* height: 200px; */
-    /* border: 1px solid #c3c3c3; */
+#gifContainer {
     display: -webkit-flex; /* Safari */
     -webkit-flex-wrap: wrap; /* Safari 6.1+ */
     display: flex;
     flex-wrap: wrap;
-
-    text-align: center;
-    margin: 0 auto;
+    margin: 20px auto 0 auto;
     width: 80%;
-  }
-  
-  #test123 {
-      border-radius: 25px;
-    width: 300px;
+}
+
+.gifWrapper {
+    background: rgb(26,26,26);
+    border: 1.5px solid rgb(240,240,240);
+    border-radius: 10px;
+    margin: 20px;
+    width: min-content;
+}
+
+.gifBox {
+    align-items: center;
+    border-radius: 10px;
+    display: flex;
     height: 200px;
-    margin: 10px;
-  }
+    justify-content: center;
+    width: 300px;
+}
 
-#testWrapper {
-    margin: 0 auto;
-    width: 80%;
+.gif {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.sideBar {
+    align-items: center;
+    border-top: 1.5px solid rgb(240,240,240);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    width: 100%;
 }
