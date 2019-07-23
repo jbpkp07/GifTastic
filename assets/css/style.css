@@ -18,7 +18,8 @@ body, html {
     height: 100%;
     margin: 0;
     overflow-x: hidden;
-    overflow-y: scroll; /* has to be scroll, not auto */
+    /* overflow-y: hidden; */
+    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -31,7 +32,7 @@ body, html {
 }
 
 #btnWrapper {
-    border: 2px solid rgb(240,240,240);
+    border: 3px solid rgb(240,240,240);
     border-radius: 10px;
     display: flex;
     display: -webkit-flex; /* Safari */
@@ -52,7 +53,7 @@ body, html {
 
 .searchBtn {
     background: rgb(0, 0, 255);
-    border: 1.5px solid rgba(240,240,240,0.75);
+    border: 2px solid rgba(240,240,240,0.75);
     border-radius: 10px;
     color: rgba(240,240,240, 0.75);
     height: 36px;
@@ -60,7 +61,7 @@ body, html {
 }
 
 .searchBtn:hover {
-    border: 1.5px solid rgba(255,255,255,1.0);
+    border: 2px solid rgba(255,255,255,1.0);
     color: rgba(255,255,255,1.0);
 }
 
@@ -72,7 +73,7 @@ body, html {
 .removeBtn {
     align-items: center;
     background: rgb(240,240,240);
-    border: 1.5px solid rgb(240,240,240);
+    border: 2px solid rgb(240,240,240);
     border-radius: 50px;
     color: rgb(32, 32, 32);
     display: flex;
@@ -88,7 +89,7 @@ body, html {
 
 #searchInputRegion {
     margin: 20px auto auto auto ;
-    width: 256px;
+    width: 310px;
 }
 
 #searchInputLabel {
@@ -99,7 +100,7 @@ body, html {
 
 #searchInput {
     background: rgb(240,240,240);
-    width: 100px;
+    width: 150px;
 }
 
 #searchInputBtn {
@@ -114,12 +115,13 @@ body, html {
     display: flex;
     flex-wrap: wrap;
     margin: 20px auto 0 auto;
-    width: 80%;
+    width: 100%;
+
+    justify-content: center;
 }
 
 .gifWrapper {
-    background: rgb(26,26,26);
-    border: 1.5px solid rgb(240,240,240);
+    border: 3px solid rgb(240,240,240);
     border-radius: 10px;
     margin: 20px;
     width: min-content;
@@ -144,11 +146,14 @@ body, html {
 
 .sideBar {
     align-items: center;
-    border-top: 1.5px solid rgb(240,240,240);
+    border-top: 3px solid rgb(240,240,240);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    color: rgb(32, 32, 32);
     display: flex;
+    font-weight: 700;
     height: 40px;
     justify-content: center;
     width: 100%;
 }
+

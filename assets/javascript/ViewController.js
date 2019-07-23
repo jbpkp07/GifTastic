@@ -13,26 +13,52 @@ class ViewController {
         this._searchHistoryBTNs = [];
         this._gifContainer = $("#gifContainer");
 
+        this._generateColors = this.generateBackgroundColors();
+
         this._gifPlaceholders = [
             
-            '<div class="gifWrapper"style="background-color:coral;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:lightblue;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:khaki;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:pink;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:lightgreen;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:coral;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:lightblue;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:khaki;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:pink;"><div class="gifBox"></div><div class="sideBar"></div></div>',
-            '<div class="gifWrapper"style="background-color:lightgreen;"><div class="gifBox"></div><div class="sideBar"></div></div>'
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>',
+            '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>'
         ];
 
         $(window).on("renderGifs", () => {
 
-            this.renderGifs();
+            this.renderAllContent();
         });
 
+        this.renderAllContent();
+    }
+
+    * generateBackgroundColors () {
+
+        yield "background-color:lightgreen;";
+        yield "background-color:pink;";
+        yield "background-color:khaki;";  
+        yield "background-color:lightblue;";
+        yield "background-color:coral;";
+
+        yield * this.generateBackgroundColors();
+    }
+
+    renderAllContent() {
+
+        this.removeListeners();
+
         this.renderSearchHistoryBTNs();
+
+        this.renderGifs();
+
+        this.addGifPlaceholders();
+
+        this.assignListeners();
     }
 
     renderSearchHistoryBTNs() {
@@ -71,10 +97,6 @@ class ViewController {
 
             count++;
         }
-
-        this.addGifPlaceholders();
-
-        this.assignListeners();
     }
 
     renderGifs() {
@@ -87,12 +109,14 @@ class ViewController {
 
                 for (let gif of topicGif._stillGifs) {
               
-                    this._gifContainer.append(gif);
+                    let color = this._generateColors.next().value;
+                    console.log(color);
+                    let coloredGif = $(gif).attr("style", color);
+
+                    this._gifContainer.prepend(coloredGif);
                 }
             }
         }
-
-        this.addGifPlaceholders();
     }
 
     addGifPlaceholders() {
@@ -101,7 +125,11 @@ class ViewController {
 
             for (let placeholder of this._gifPlaceholders) {
 
-                this._gifContainer.append(placeholder);
+                let color = this._generateColors.next().value;
+                console.log(color);
+                let placeholderColored = $(placeholder).attr("style", color);
+
+                this._gifContainer.prepend(placeholderColored);
             }
         }
     }
@@ -115,14 +143,14 @@ class ViewController {
             btn.children(".selectBtn").click(() => {
 
                 if (btn.hasClass("selected")) {
-
+  
                     btn.removeClass("selected");
 
                     this._model.unSelectTopic(simpleTopic);
 
                     btn.fadeTo(250, 1.0);
 
-                    this.renderGifs();
+                    this.renderAllContent();
                 }
                 else {
 
@@ -135,14 +163,10 @@ class ViewController {
             });
 
             btn.children(".removeBtn").click(() => {
-
-                this.removeListeners();
-
+ 
                 this._model.removeTopic(simpleTopic);
 
-                this.renderSearchHistoryBTNs();
-
-                this.renderGifs();
+                this.renderAllContent();
             });
 
             if ($(window).width() > 768) {
@@ -163,16 +187,22 @@ class ViewController {
 
             event.preventDefault();
 
-            this.removeListeners();
-
             let newSimpleTopic = this._searchInput.val().toString();
 
             this._searchInput.val("");
 
             this._model.addTopic(newSimpleTopic.trim());
 
-            this.renderSearchHistoryBTNs();
+            this.renderAllContent();
         });
+
+        for (let gifWrapper of this._gifContainer.children()) {
+
+            $(gifWrapper).find(".gif").click(() => {
+
+                console.log("clicked gif");
+            });
+        }
     }
 
     removeListeners() {
@@ -185,5 +215,10 @@ class ViewController {
         }
 
         this._submitBTN.off();
+
+        for (let gifWrapper of this._gifContainer.children()) {
+ 
+            $(gifWrapper).find(".gif").off();
+        }
     }
 }
