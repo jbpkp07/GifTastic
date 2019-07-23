@@ -80,13 +80,13 @@ body, html {
     font-weight: 900;
     justify-content: center;
     margin-left: auto;
-    padding: 2px 4px 2px 4px;
+    /* padding: 2px 4px 2px 4px; */
     position: relative;
     right: -12px;
     top: -45px;
-    width: min-content;
-    width: -moz-min-content;
-    width: -webkit-min-content;
+
+    height: 25px;
+    width: 25px;
 }
 
 #searchInputRegion {
