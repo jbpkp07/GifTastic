@@ -85,6 +85,8 @@ body, html {
     right: -12px;
     top: -45px;
     width: min-content;
+    width: -moz-min-content;
+    width: -webkit-min-content;
 }
 
 #searchInputRegion {

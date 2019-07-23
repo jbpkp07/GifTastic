@@ -148,7 +148,24 @@ class TopicGifs {
 
                 stillGif.src = stillSRC; //Begin still image downloading immediately
 
-                let animatedSRC = gifPackage.images.fixed_height.webp;  //Optimized for best quality vs load time
+                let animatedSRC;
+
+                if ($(window).width() > 768) {
+
+                    animatedSRC = gifPackage.images.fixed_height.webp;  //Optimized for best quality vs load time (Desktop Google Chrome)
+                }
+
+                var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+                if (!is_safari) {
+                    console.log("not Safari");
+                }
+
+                var is_chrome = !!window.chrome && !is_opera && !is_Edge;
+
+                if (is_chrome) {
+                    console.log("is Chrome");
+                }
 
                 let animatedGif = new Image();
 
