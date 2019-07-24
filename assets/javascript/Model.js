@@ -11,12 +11,12 @@ class Model {
         this._apiLimit = 10;
         this._giphyAPI = new GiphyAPI(this._apiLimit);
 
-        this.assignTopicsFromLocalStorage();
+        this.assignTopicsFromSessionStorage();
     }
 
-    assignTopicsFromLocalStorage() {
+    assignTopicsFromSessionStorage() {
 
-        if (localStorage.getItem(this._topicsKey) === null) {
+        if (sessionStorage.getItem(this._topicsKey) === null) {
 
             this._topicGifs.push(new TopicGifs("Lebron James", false));
             this._topicGifs.push(new TopicGifs("Kobe Bryant", false));
@@ -29,17 +29,17 @@ class Model {
             this._topicGifs.push(new TopicGifs("Michael Jordan", false));
             this._topicGifs.push(new TopicGifs("Anthony Davis", false));
 
-            this.setTopicsInLocalStorage();
+            this.setTopicsInSessionStorage();
         }
         else {
 
-            this.getTopicsFromLocalStorage();
+            this.getTopicsFromSessionStorage();
         }
     }
 
-    getTopicsFromLocalStorage() {
+    getTopicsFromSessionStorage() {
 
-        let simpleTopics = JSON.parse(localStorage.getItem(this._topicsKey));
+        let simpleTopics = JSON.parse(sessionStorage.getItem(this._topicsKey));
 
         for (let topic of simpleTopics) {
 
@@ -47,7 +47,7 @@ class Model {
         }
     }
 
-    setTopicsInLocalStorage() {
+    setTopicsInSessionStorage() {
 
         let simpleTopics = [];
 
@@ -56,7 +56,7 @@ class Model {
             simpleTopics.push(topic._topic);
         }
 
-        localStorage.setItem(this._topicsKey, JSON.stringify(simpleTopics));
+        sessionStorage.setItem(this._topicsKey, JSON.stringify(simpleTopics));
     }
 
     addTopic(simpleTopic) {
@@ -72,7 +72,7 @@ class Model {
 
             this._topicGifs.push(new TopicGifs(simpleTopic, false));
 
-            this.setTopicsInLocalStorage();
+            this.setTopicsInSessionStorage();
         }
     }
 
@@ -80,7 +80,7 @@ class Model {
 
         this._topicGifs = this._topicGifs.filter(topicOBJ => topicOBJ._topic !== simpleTopic);
 
-        this.setTopicsInLocalStorage();
+        this.setTopicsInSessionStorage();
     }
 
     selectTopic(simpleTopic) {

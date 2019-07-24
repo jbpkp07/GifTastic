@@ -40,7 +40,7 @@ class ViewController {
     * generateBackgroundColors() {
 
         yield "background-color: coral;";
-        yield "background-color: rgb(43,121,218);"; 
+        yield "background-color: rgb(43,121,218);";
         yield "background-color: khaki;";
         yield "background-color: pink;";
         yield "background-color: lightgreen;";
@@ -245,7 +245,7 @@ class ViewController {
 
                     let stillSRC = thisElement.find(".gif").attr("still_src");
 
-                    thisElement.find(".gif").attr("src", stillSRC); 
+                    thisElement.find(".gif").attr("src", stillSRC);
                 }
             });
         }
