@@ -1,5 +1,5 @@
 "use strict";
-/* global Utility */
+/* global Utility, isChrome, isFirefox, isEdge, isOpera */
 
 class Model {
 
