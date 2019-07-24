@@ -150,31 +150,39 @@ class TopicGifs {
 
                 let animatedSRC;
 
-                if ($(window).width() > 768) {
+                if ($(window).width() <= 768) {  
 
-                    animatedSRC = gifPackage.images.fixed_height.webp;  //Optimized for best quality vs load time (Desktop Google Chrome)
+                    //If mobile, can't use '.webp' files, so we use '.gif' instead.
+                    //To limit data usage, we shift over to smaller gif sizes here.
+                    animatedSRC = gifPackage.images.fixed_height_small.url;
+                    console.log("Downloading small gifs...");
                 }
+                else if (isChrome || isFirefox || isEdge || isOpera) {
 
-                var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-                if (!is_safari) {
-                    console.log("not Safari");
+                    //Optimized for best quality vs load time (Desktop Browsers > 768px). Use '.webp'
+                    animatedSRC = gifPackage.images.fixed_height.webp;
+                    console.log("Downloading webp's...");  
                 }
+                else {
 
-                var is_chrome = !!window.chrome && !is_opera && !is_Edge;
-
-                if (is_chrome) {
-                    console.log("is Chrome");
+                    //Can't use smaller, better '.webp' files if using IE or Safari (Desktop Browsers > 768px)
+                    //Other Desktop Browser? Use '.gifs'
+                    animatedSRC = gifPackage.images.fixed_height.url;
+                    console.log("Downloading large gifs...");  
                 }
 
                 let animatedGif = new Image();
 
-                setTimeout(() => {
+                if ($(window).width() > 768) {
 
-                    //Begin download after we will likely already have still images (try to get them first!)
-                    animatedGif.src = animatedSRC;
-                }, 1000);
+                    //Only preemptively download animated gifs/webp if NOT on mobile
+                    setTimeout(() => {
 
+                        //Begin download after we will likely already have still images (try to get them first!)
+                        animatedGif.src = animatedSRC;
+                    }, 1000);    
+                }
+              
                 let rating = gifPackage.rating.toUpperCase();
 
                 $(stillGif).addClass("gif").attr("still_src", stillSRC).attr("animated_src", animatedSRC);
@@ -209,9 +217,9 @@ class GiphyAPI {
 
     getGifsFromAPI(simpleTopic) {
 
-        let apiURL = this.generateAPIUrl(simpleTopic);
+        const apiURL = this.generateAPIUrl(simpleTopic);
 
-        let connection = {
+        const connection = {
             url: apiURL,
             method: "Get"
         };

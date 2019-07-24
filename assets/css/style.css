@@ -52,7 +52,7 @@ body, html {
 }
 
 .searchBtn {
-    background: rgb(0, 0, 255);
+    background: rgb(43,121,218);
     border: 2px solid rgba(240,240,240,0.75);
     border-radius: 10px;
     color: rgba(240,240,240, 0.75);
@@ -78,14 +78,12 @@ body, html {
     color: rgb(32, 32, 32);
     display: flex;
     font-weight: 900;
+    height: 25px;
     justify-content: center;
     margin-left: auto;
-    /* padding: 2px 4px 2px 4px; */
     position: relative;
     right: -12px;
     top: -45px;
-
-    height: 25px;
     width: 25px;
 }
 
