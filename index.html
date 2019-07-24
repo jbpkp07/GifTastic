@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>GifTastic v1.3.1</title>
+    <title>GifTastic v2.0</title>
 
     <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Roboto&display=swap" as="style">
 
@@ -23,15 +23,16 @@
 
     <form id="searchInputForm">
         <div id="searchInputRegion">
-            <label id="searchInputLabel" for="searchInput">Search &nbsp;</label>
-            <input class="form-control" id="searchInput" type="text">
+            <input class="form-control" id="searchInput" type="text" placeholder="Search for gifs">
             <button id="searchInputBtn" type="submit">Submit</button>
         </div>
     </form>
 
     <div id="btnWrapper">
-        <div id="searchHistory">Search History Toggle Buttons</div>
+        <div id="searchHistory">Search history toggle buttons</div>
     </div>
+
+    <div id="instructions" style="opacity: 0;">Hover or click gifs for playback</div>
 
     <div id="gifContainer"></div>
 

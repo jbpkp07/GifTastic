@@ -12,6 +12,7 @@ class ViewController {
         this._btnWrapper = $("#btnWrapper");
         this._searchHistoryBTNs = [];
         this._gifContainer = $("#gifContainer");
+        this._instructions = $("#instructions");
 
         this._generateColors = this.generateBackgroundColors();
 
@@ -29,7 +30,7 @@ class ViewController {
             '<div class="gifWrapper"><div class="gifBox"></div><div class="sideBar"></div></div>'
         ];
 
-        $(window).on("renderGifs", () => {
+        $(window).on("renderAllContent", () => {
 
             this.renderAllContent();
         });
@@ -103,15 +104,10 @@ class ViewController {
 
         this._gifContainer.empty();
 
-        //Reverse through array. 
-        //We want to append in reverse order, so that the most recent searches produce images at the top 
-        for (let i = this._model._topicGifs.length - 1; i >= 0; i--) {
-
-            let topicGif = this._model._topicGifs[i];
+        for (let topicGif of this._model._topicGifs) {
 
             if (topicGif._isSelected) {
 
-                //Here we traverse forwards to make sure the images with the most lead-time to download are displayed first for responsiveness
                 for (let gif of topicGif._gifHTMLElements) {
 
                     let color = this._generateColors.next().value;
@@ -128,6 +124,8 @@ class ViewController {
 
         if (this._gifContainer.children().length === 0) {
 
+            this._instructions.fadeTo(250, 0);
+
             for (let placeholder of this._gifPlaceholders) {
 
                 let color = this._generateColors.next().value;
@@ -136,6 +134,10 @@ class ViewController {
 
                 this._gifContainer.append(placeholderColored);
             }
+        }
+        else {
+
+            this._instructions.fadeTo(1000, 1.0);
         }
     }
 
@@ -183,7 +185,7 @@ class ViewController {
 
                 btn.mouseleave(() => {
 
-                    btn.children(".removeBtn").fadeOut(250);
+                    btn.children(".removeBtn").fadeOut(0);
                 });
             }
         }
@@ -197,8 +199,6 @@ class ViewController {
             this._searchInput.val("");
 
             this._model.addTopic(newSimpleTopic.trim());
-
-            this.renderAllContent();
         });
 
         for (let gifWrapper of this._gifContainer.children()) {

@@ -68,11 +68,15 @@ class Model {
             return;
         }
 
-        if (typeof this._topicGifs.find(topicOBJ => topicOBJ._topic.toUpperCase() === simpleTopic.toUpperCase()) === 'undefined') {
+        let isTopicAlreadyInHistory = typeof this._topicGifs.find(topicOBJ => topicOBJ._topic.toUpperCase() === simpleTopic.toUpperCase()) !== 'undefined';
 
-            this._topicGifs.push(new TopicGifs(simpleTopic, false));
+        if (!isTopicAlreadyInHistory) {
+
+            this._topicGifs.push(new TopicGifs(simpleTopic, true));
 
             this.setTopicsInSessionStorage();
+
+            this.selectTopic(simpleTopic);
         }
     }
 
@@ -87,20 +91,35 @@ class Model {
 
         let topic = this._topicGifs.find(topicOBJ => topicOBJ._topic === simpleTopic);
 
-        topic.selectTopic();
-
         if (topic._apiResponse === null) {
 
             this._giphyAPI.getGifsFromAPI(simpleTopic).then(() => {
 
                 topic.assignGifs(this._giphyAPI._apiResponse);
 
-                dispatchEvent(new CustomEvent("renderGifs"));
+                if (topic._gifHTMLElements.length === 0) {
+
+                    alert("No Gifs Found For :   " + topic._topic);
+
+                    this.removeTopic(simpleTopic);
+                }
+                else {
+
+                    this.unSelectAllTopics();
+
+                    topic.selectTopic();
+                
+                    dispatchEvent(new CustomEvent("renderAllContent"));
+                }  
             });
         }
         else {
 
-            dispatchEvent(new CustomEvent("renderGifs"));
+            this.unSelectAllTopics();
+
+            topic.selectTopic();
+
+            dispatchEvent(new CustomEvent("renderAllContent"));
         }
     }
 
@@ -109,6 +128,14 @@ class Model {
         let topic = this._topicGifs.find(topicOBJ => topicOBJ._topic === simpleTopic);
 
         topic.unSelectTopic();
+    }
+
+    unSelectAllTopics() {
+
+        for (let topic of this._topicGifs) {
+
+            topic.unSelectTopic();
+        }
     }
 }
 

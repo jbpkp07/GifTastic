@@ -24,6 +24,35 @@ body, html {
     width: 100%;
 }
 
+#searchInputRegion {
+    margin: 20px auto auto auto;
+    overflow: auto;
+    width: 310px;
+}
+
+#searchInput {
+    background: rgb(32, 32, 32);
+    border: 3px solid rgba(240,240,240,1.0);
+    border-radius: 10px;
+    Color: rgb(240,240,240);
+    font-family: 'Roboto', sans-serif;
+    font-size: 12pt;
+    height: 36px;
+    outline: none;
+    padding-left: 10px;
+    width: 225px;
+}
+
+#searchInputBtn {
+    background: rgb(43,121,218);
+    border: 2px solid rgba(240,240,240,0.75);
+    border-radius: 10px;
+    color: rgba(255,255,255,1.0);
+    float: right;
+    outline: none;
+    padding: 9px 10px 8px 10px;
+}
+
 #btnWrapper {
     border: 3px solid rgb(240,240,240);
     border-radius: 10px;
@@ -38,8 +67,8 @@ body, html {
 }
 
 #searchHistory {
-    font-size: 10pt;
-    margin: auto 10px auto 10px;
+    font-size: 12pt;
+    margin: auto 5px auto 5px;
     padding: 10px 0px 20px 0px;
     width: 100%;
 }
@@ -53,7 +82,7 @@ body, html {
     margin: 0px 10px 20px 10px;
 }
 
-.searchBtn:hover {
+.searchBtn:hover, #searchInputBtn:hover {
     border: 2px solid rgba(255,255,255,1.0);
     color: rgba(255,255,255,1.0);
 }
@@ -80,26 +109,10 @@ body, html {
     width: 25px;
 }
 
-#searchInputRegion {
-    margin: 20px auto auto auto ;
-    width: 310px;
-}
-
-#searchInputLabel {
-    font-size: 16pt;
-    position: relative;
-    top: 3px;
-}
-
-#searchInput {
-    background: rgb(240,240,240);
-    width: 150px;
-}
-
-#searchInputBtn {
-    background: rgb(240,240,240);
-    left: 14px;
-    position: relative;
+#instructions {
+    font-size: 12pt;
+    margin-top: 40px;
+    text-align: center;
 }
 
 #gifContainer {
@@ -109,7 +122,6 @@ body, html {
     flex-wrap: wrap;
     margin: 20px auto 0 auto;
     width: 100%;
-
     justify-content: center;
 }
 
