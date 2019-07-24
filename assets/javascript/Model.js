@@ -8,7 +8,7 @@ class Model {
         this._topicGifs = [];
         this._topicsKey = "_gifTasticTopics";
 
-        this._apiLimit = 10;
+        this._apiLimit = 50;
         this._giphyAPI = new GiphyAPI(this._apiLimit);
 
         this.assignTopicsFromSessionStorage();
@@ -139,9 +139,36 @@ class TopicGifs {
         if (this._apiResponse === null) {
 
             this._apiResponse = apiResponse;
-     
-            for (let gifPackage of this._apiResponse.data) {
-          
+
+            let resultsCount = this._apiResponse.pagination.count;
+
+            let randomResultsIndexes = [];
+
+            if (resultsCount > 10) {
+
+                while (randomResultsIndexes.length < 10) {
+
+                    let randomIndex = Math.floor(Math.random() * resultsCount);
+
+                    if (!randomResultsIndexes.includes(randomIndex)) {
+
+                        randomResultsIndexes.push(randomIndex);
+                    }
+                }
+            }
+            else {
+
+                //Not enough results to randomize, so we just load the array with sequential indexes
+                for (let i = 0; i < resultsCount; i++) {
+
+                    randomResultsIndexes.push(i);
+                }
+            }
+
+            for (let i of randomResultsIndexes) {
+
+                let gifPackage = this._apiResponse.data[i];
+
                 let stillSRC = gifPackage.images.original_still.url;
 
                 let stillGif = new Image();
@@ -150,25 +177,22 @@ class TopicGifs {
 
                 let animatedSRC;
 
-                if ($(window).width() <= 768) {  
+                if ($(window).width() <= 768) {
 
                     //If mobile, can't use '.webp' files, so we use '.gif' instead.
                     //To limit data usage, we shift over to smaller gif sizes here.
                     animatedSRC = gifPackage.images.fixed_height_small.url;
-                    console.log("Downloading small gifs...");
                 }
                 else if (isChrome || isFirefox || isEdge || isOpera) {
 
                     //Optimized for best quality vs load time (Desktop Browsers > 768px). Use '.webp'
                     animatedSRC = gifPackage.images.fixed_height.webp;
-                    console.log("Downloading webp's...");  
                 }
                 else {
 
                     //Can't use smaller, better '.webp' files if using IE or Safari (Desktop Browsers > 768px)
                     //Other Desktop Browser? Use '.gifs'
                     animatedSRC = gifPackage.images.fixed_height.url;
-                    console.log("Downloading large gifs...");  
                 }
 
                 let animatedGif = new Image();
@@ -180,9 +204,9 @@ class TopicGifs {
 
                         //Begin download after we will likely already have still images (try to get them first!)
                         animatedGif.src = animatedSRC;
-                    }, 1000);    
+                    }, 1000);
                 }
-              
+
                 let rating = gifPackage.rating.toUpperCase();
 
                 $(stillGif).addClass("gif").attr("still_src", stillSRC).attr("animated_src", animatedSRC);
